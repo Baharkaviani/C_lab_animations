@@ -53,7 +53,7 @@ class CodeAnalyzer(Scene):
         )
         self.wait(1.5)
 
-        line = Line([-6.3, 3.2, 0], [-6.3, -1.7, 0])
+        line = Line([-6.3, 3.2, 0], [-6.3, -3.8, 0])
 
         # draw the code
         code = VGroup()
@@ -72,9 +72,9 @@ class CodeAnalyzer(Scene):
         b1.set_color(color, WHITE)
         code.add(b1)
 
-        #TODO: "%d"
-        l3 = TextMobject("    \\textrm{printf}", "\\textrm{(}", "\\textrm{ d,}", "\\textrm{ a}", "\\textrm{ );}")
-        for i, color in zip(l3, [PURPLE_C, GREEN_E, BLUE, RED_E, WHITE]):
+        l3 = TextMobject("    \\textrm{printf}", "\\textrm{(}", "\\textrm{ \"\%d, \"}", "\\textrm{,}",
+                         "\\textrm{ a}", "\\textrm{ );}")
+        for i, color in zip(l3, [PURPLE_C, WHITE, GREEN, WHITE, RED_E, WHITE]):
             i.set_color(color)
         code.add(l3)
 
@@ -92,31 +92,56 @@ class CodeAnalyzer(Scene):
             i.set_color(color)
         code.add(l5)
 
-        code.add(b1)
-
-        code.add(l3)
-
-        b3 = TextMobject("    \\textrm{\\{}")
+        b3 = TextMobject("\\textrm{\\{}")
         b3.set_color(color, WHITE)
         code.add(b3)
 
-        l6 = TextMobject("        \\textrm{static}", "\\textrm{ int}", "\\textrm{ a}", "\\textrm{ = 10;}")
-        for i, color in zip(l6, [YELLOW_C, BLUE, RED_E, WHITE]):
+        l6 = TextMobject("    \\textrm{printf}", "\\textrm{(}", "\\textrm{ \"\%d, \"}", "\\textrm{,}",
+                         "\\textrm{ a}", "\\textrm{ );}")
+        for i, color in zip(l6, [PURPLE_C, WHITE, GREEN, WHITE, RED_E, WHITE]):
             i.set_color(color)
         code.add(l6)
 
-        #TODO: "%d"
-        l7 = TextMobject("        \\textrm{printf}", "\\textrm{(}", "\\textrm{ \"d,}", "\\textrm{ \\}", "\\textrm{n\", }", "\\textrm{ a}", "\\textrm{ );}")
-        for i, color in zip(l7, [PURPLE_C, WHITE, GREEN_E, WHITE, WHITE, RED_E, WHITE]):
+        b4 = TextMobject("    \\textrm{\\{}")
+        b4.set_color(color, WHITE)
+        code.add(b4)
+
+        l7 = TextMobject("        \\textrm{static}", "\\textrm{ int}", "\\textrm{ a}", "\\textrm{ = 10;}")
+        for i, color in zip(l7, [YELLOW_C, BLUE, RED_E, WHITE]):
             i.set_color(color)
         code.add(l7)
+
+        l8 = TextMobject("        \\textrm{printf}", "\\textrm{(}", "\\textrm{ \"\%d, \"}", "\\textrm{,}",
+                         "\\textrm{ a}", "\\textrm{ );}")
+        for i, color in zip(l8, [PURPLE_C, WHITE, GREEN, WHITE, RED_E, WHITE]):
+            i.set_color(color)
+        code.add(l8)
+
+        l9 = TextMobject("        \\textrm{func}", "\\textrm{();}")
+        for i, color in zip(l9, [PURPLE_C, WHITE]):
+            i.set_color(color)
+        code.add(l9)
+
+        b5 = TextMobject("    \\textrm{\\}}")
+        b5.set_color(color, WHITE)
+        code.add(b5)
+
+        l10 = TextMobject("    \\textrm{printf}", "\\textrm{(}", "\\textrm{ \"\%d, \"}", "\\textrm{,}",
+                         "\\textrm{ a}", "\\textrm{ );}")
+        for i, color in zip(l10, [PURPLE_C, WHITE, GREEN, WHITE, RED_E, WHITE]):
+            i.set_color(color)
+        code.add(l10)
+
+        b6 = TextMobject("\\textrm{\\}}")
+        b6.set_color(color, WHITE)
+        code.add(b6)
 
         for i, l in enumerate(code):
             l.to_edge(LEFT, buff=0.7)
             l.shift([0.2 * (len(l[0].get_tex_string()) - len(l[0].get_tex_string().lstrip())), -0.55 * i + 0.65, 0])
 
-        code.scale(0.85)
-        code.shift([0, 2.6, 0])
+        code.scale(0.8)
+        code.shift([0, 3, 0])
 
         l1_x = code[0].get_x() + 0.11  # keeping it as temp value
         l1_y = code[0].get_y()  # keeping it as temp value
