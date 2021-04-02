@@ -511,7 +511,7 @@ class Tips_Global(Scene):
 
 class Tips_Static(Scene):
     """
-    Show the important tips of global variables.
+    Show the important tips of static variables.
     """
 
     def construct(self):
