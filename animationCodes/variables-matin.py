@@ -373,11 +373,11 @@ class Tips_Global(Scene):
         bp1 = TextMobject("global variable", " keyword", ":", " extern")
         bp2 = TextMobject("global variable", " scope", ":", " available throughout the program")
         bp3 = TextMobject("global variable", " default value", ":", " zero")
-        bp1[0].set_color(YELLOW_C)
+        bp1[0].set_color(GREEN)
         bp1[3].set_color(BLUE)
-        bp2[0].set_color(YELLOW_C)
+        bp2[0].set_color(GREEN)
         bp2[3].set_color(BLUE)
-        bp3[0].set_color(YELLOW_C)
+        bp3[0].set_color(GREEN)
         bp3[3].set_color(BLUE)
         bp1.scale(0.7)
         bp2.scale(0.7)
@@ -398,7 +398,7 @@ class Tips_Global(Scene):
         local_tip_pack = VGroup(bp1, bp2, bp3)
 
         rect = SurroundingRectangle(local_tip_pack, buff=0.2)
-        rect.set_color(YELLOW_C)
+        rect.set_color(GREEN)
         self.play(Write(rect))
         self.wait(1)
 
@@ -408,7 +408,7 @@ class Tips_Global(Scene):
         bp1_small = TextMobject(" keyword", ":", " extern")
         bp2_small = TextMobject(" scope", ":", " available throughout the program")
         bp3_small = TextMobject(" default value", ":", " garbage value")
-        mini_title.set_color(YELLOW_C)
+        mini_title.set_color(GREEN)
         bp1_small[2].set_color(BLUE)
         bp2_small[2].set_color(BLUE)
         bp3_small[2].set_color(BLUE)
@@ -427,7 +427,7 @@ class Tips_Global(Scene):
 
         local_tip_pack_small = VGroup(mini_title, bp1_small, bp2_small, bp3_small)
         rect_small = SurroundingRectangle(local_tip_pack_small, buff=0.2)
-        rect_small.set_color(YELLOW_C)
+        rect_small.set_color(GREEN)
         rect_pack_small = VGroup(local_tip_pack_small, rect_small)
 
         self.play(Transform(rect_pack, rect_pack_small))
