@@ -151,7 +151,7 @@ class CodeAnalyzer(Scene):
         self.play(FadeInFrom(line, DOWN))
 
         for l in code:
-            self.play(FadeInFrom(l, LEFT), run_time=0.5)
+            self.play(FadeInFrom(l, LEFT), run_time=0.3)
         self.wait(1)
 
         # part 1: draw the memory at right side
@@ -183,6 +183,21 @@ class CodeAnalyzer(Scene):
         memory1 = VGroup(*[m1_text, m1, m1_val])
         memory1.shift([2, 0, 0])
         memory1.set_color(GREEN)
+
+        # second version of a1
+        a3 = 100
+
+        m2_text = TextMobject(f"a")
+        m2_text.scale(1.5)
+        m2 = Rectangle(height=1, width=4)
+        m2_val = TextMobject(f"{a3}")
+        m2_val.scale(1.5)
+        m2.next_to(m2_text, RIGHT)
+        m2_val.next_to(m2_text, 4*RIGHT)
+
+        memory2 = VGroup(*[m2_text, m2, m2_val])
+        memory2.shift([2, 3, 0])
+        memory2.set_color(YELLOW)
 
         # part 1: start the analyze
         # TODO: organize the memory
@@ -226,9 +241,9 @@ class CodeAnalyzer(Scene):
         self.wait(0.7)
 
         memory0.set_color(RED)
-        self.wait(0.7)
+        self.wait(1)
         memory0.set_color(BLUE_B)
-        self.wait(0.7)
+        self.wait(1)
 
         # inner block in main
         mm_surr1 = SurroundingRectangle(b4, buff=0.04, color=GREEN)
@@ -271,9 +286,11 @@ class CodeAnalyzer(Scene):
         self.wait(0.7)
 
         a1 = 100
-        m0_val = TextMobject(f"{a1}")
-        memory0.set_color(BLUE_B)
-        self.wait(0.7)
+        self.remove(m0_val)
+        self.add(memory2)
+        self.play(FadeOut(m0, m0_text))
+        memory2.set_color(BLUE_B)
+        self.wait(1)
 
         f_surr5 = SurroundingRectangle(b2, buff=0.04, color=YELLOW)
         self.play(ReplacementTransform(f_surr4, f_surr5))
@@ -295,12 +312,12 @@ class CodeAnalyzer(Scene):
         self.play(ReplacementTransform(mm_surr5, m_surr4))
         self.wait(0.7)
 
-        memory0.set_color(RED)
-        self.wait(0.7)
-        memory0.set_color(BLUE_B)
-        self.wait(0.7)
+        memory2.set_color(RED)
+        self.wait(1)
+        memory2.set_color(BLUE_B)
+        self.wait(1)
 
-        surr2 = SurroundingRectangle(l10, buff=0.04, color=BLUE)
+        surr2 = SurroundingRectangle(b6, buff=0.04, color=BLUE)
         self.play(ReplacementTransform(m_surr4, surr2))
         self.wait(0.7)
 
