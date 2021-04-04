@@ -41,13 +41,7 @@ class CodeAnalyzer(Scene):
         # TODO: add x svg file as a character
 
         ### part 1: example code
-        # draw the code at left side
-        CodeAnalyzer.drawCode(self)
-
-        # draw the memory at right side
-        CodeAnalyzer.drawMemory(self)
-
-    def drawCode(self):
+        # part 1: draw the code at left side
         codeTitle = TextMobject("Example Program:")
         codeTitle.to_edge(LEFT, buff=0.8)
         codeTitle.shift([-0.5, 3.5, 0])
@@ -160,40 +154,93 @@ class CodeAnalyzer(Scene):
             self.play(FadeInFrom(l, LEFT), run_time=0.5)
         self.wait(1)
 
+        # part 1: draw the memory at right side
+        a1 = 20
 
-    def drawMemory(self):
-        pass
+        m0_text = TextMobject(f"a")
+        m0_text.scale(1.5)
+        m0 = Rectangle(height=1, width=4)
+        m0_val = TextMobject(f"{a1}")
+        m0_val.scale(1.5)
+        m0.next_to(m0_text, RIGHT)
+        m0_val.next_to(m0_text, 4*RIGHT)
 
-class DrawMemory(Scene):
-    def construct(self):
-        a = 2
-        m = TextMobject(f"a")
-        m.scale(1.5)
-        m.set_color(BLUE_B)
-        mm0 = Rectangle(height=1, width=4, color=BLUE)
-        mm = TextMobject(f"{a}")
-        mm0.next_to(m, RIGHT)
-        mm.next_to(m, 4*RIGHT)
-        mm.scale(1.5)
-        mm.set_color(BLUE_B)
+        memory0 = VGroup(*[m0_text, m0, m0_val])
+        memory0.shift([2, 0, 0])
+        memory0.set_color(BLUE_B)
 
-        lkjh = VGroup(*[m, mm0, mm])
-        lkjh.shift([2, 0, 0])
-        self.add(lkjh)
+        # second a (inner block of mani)
+        a2 = 10
 
+        m1_text = TextMobject(f"a")
+        m1_text.scale(1.5)
+        m1 = Rectangle(height=1, width=4)
+        m1_val = TextMobject(f"{a2}")
+        m1_val.scale(1.5)
+        m1.next_to(m1_text, RIGHT)
+        m1_val.next_to(m1_text, 4*RIGHT)
+
+        memory1 = VGroup(*[m1_text, m1, m1_val])
+        memory1.shift([2, 0, 0])
+        memory1.set_color(BLUE_B)
+
+        # part 1: start the analyze
+        # TODO: organize the memory
         memory = VGroup(
                     *[
                         VGroup(
                             *[
-                                Square(color=BLUE, side_length=1.0),
+                                TextMobject(f"m{i}"),
                                 Rectangle(height=1, width=4, color=BLUE)
                             ]
-                        ).arrange_submobjects(RIGHT, buff=0)
-                        for i in range(10)
+                        ).arrange_submobjects(RIGHT)
+                        for i in range(8)
                     ]
                 ).arrange_submobjects(DOWN, buff=0)
 
-        memory.shift([2, 0, 0])
-        #self.add(memory)
+        memory.shift([3, 0, 0])
+        self.play(FadeInFrom(memory))
+        self.wait(2)
+        #self.play(FadeOut(memory))
+        self.wait(1)
+
+        # global section
+        surr = SurroundingRectangle(l1, buff=0.04, color=BLUE)
+        self.play(Write(surr))
+        self.wait(0.7)
+
+        self.play(FadeInFrom(memory0))
+        self.wait(0.7)
+
+        # main block
+        m_surr1 = SurroundingRectangle(l5, buff=0.04, color=RED)
+        self.play(ReplacementTransform(surr, m_surr1))
+        self.wait(0.7)
+
+        m_surr2 = SurroundingRectangle(b3, buff=0.04, color=RED)
+        self.play(ReplacementTransform(m_surr1, m_surr2))
+        self.wait(0.7)
+
+        m_surr3 = SurroundingRectangle(l6, buff=0.04, color=RED)
+        self.play(ReplacementTransform(m_surr2, m_surr3))
+        self.wait(0.7)
+
+        memory0.set_color(RED)
+        self.wait(1)
+
+        # inner block in main
+        mm_surr1 = SurroundingRectangle(b4, buff=0.04, color=GREEN)
+        self.play(ReplacementTransform(m_surr3, mm_surr1))
+        self.wait(0.7)
+
+        mm_surr2 = SurroundingRectangle(l7, buff=0.04, color=GREEN)
+        self.play(ReplacementTransform(mm_surr1, mm_surr2))
+        self.wait(0.7)
+
+        self.play(FadeInFrom(memory1))
+        self.wait(0.7)
+
+        memory0.set_color(BLUE_B)
+        self.wait(1)
 
         self.wait()
