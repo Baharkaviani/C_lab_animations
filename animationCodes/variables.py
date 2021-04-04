@@ -166,7 +166,7 @@ class CodeAnalyzer(Scene):
         m0_val.next_to(m0_text, 4*RIGHT)
 
         memory0 = VGroup(*[m0_text, m0, m0_val])
-        memory0.shift([2, 0, 0])
+        memory0.shift([2, 3, 0])
         memory0.set_color(BLUE_B)
 
         # second a (inner block of mani)
@@ -182,7 +182,7 @@ class CodeAnalyzer(Scene):
 
         memory1 = VGroup(*[m1_text, m1, m1_val])
         memory1.shift([2, 0, 0])
-        memory1.set_color(BLUE_B)
+        memory1.set_color(GREEN)
 
         # part 1: start the analyze
         # TODO: organize the memory
@@ -198,10 +198,10 @@ class CodeAnalyzer(Scene):
                     ]
                 ).arrange_submobjects(DOWN, buff=0)
 
-        memory.shift([3, 0, 0])
+        memory.shift([4, 0, 0])
         self.play(FadeInFrom(memory))
         self.wait(2)
-        #self.play(FadeOut(memory))
+        self.play(FadeOut(memory))
         self.wait(1)
 
         # global section
@@ -226,7 +226,9 @@ class CodeAnalyzer(Scene):
         self.wait(0.7)
 
         memory0.set_color(RED)
-        self.wait(1)
+        self.wait(0.7)
+        memory0.set_color(BLUE_B)
+        self.wait(0.7)
 
         # inner block in main
         mm_surr1 = SurroundingRectangle(b4, buff=0.04, color=GREEN)
@@ -240,7 +242,69 @@ class CodeAnalyzer(Scene):
         self.play(FadeInFrom(memory1))
         self.wait(0.7)
 
+        mm_surr3 = SurroundingRectangle(l8, buff=0.04, color=GREEN)
+        self.play(ReplacementTransform(mm_surr2, mm_surr3))
+        self.wait(0.7)
+
+        mm_surr4 = SurroundingRectangle(l9, buff=0.04, color=GREEN)
+        self.play(ReplacementTransform(mm_surr3, mm_surr4))
+        self.wait(0.7)
+
+        # func block
+        f_surr1 = SurroundingRectangle(l2, buff=0.04, color=YELLOW)
+        self.play(Write(f_surr1))
+        self.wait(0.7)
+
+        f_surr2 = SurroundingRectangle(b1, buff=0.04, color=YELLOW)
+        self.play(ReplacementTransform(f_surr1, f_surr2))
+        self.wait(0.7)
+
+        f_surr3 = SurroundingRectangle(l3, buff=0.04, color=YELLOW)
+        self.play(ReplacementTransform(f_surr2, f_surr3))
+        self.wait(0.7)
+
+        memory0.set_color(YELLOW)
+        self.wait(0.7)
+
+        f_surr4 = SurroundingRectangle(l4, buff=0.04, color=YELLOW)
+        self.play(ReplacementTransform(f_surr3, f_surr4))
+        self.wait(0.7)
+
+        a1 = 100
+        m0_val = TextMobject(f"{a1}")
         memory0.set_color(BLUE_B)
-        self.wait(1)
+        self.wait(0.7)
+
+        f_surr5 = SurroundingRectangle(b2, buff=0.04, color=YELLOW)
+        self.play(ReplacementTransform(f_surr4, f_surr5))
+        self.wait(0.7)
+
+        self.play(FadeOut(f_surr5))
+        self.wait(0.7)
+
+        # inner block in main cont
+        mm_surr5 = SurroundingRectangle(b5, buff=0.04, color=GREEN)
+        self.play(ReplacementTransform(mm_surr4, mm_surr5))
+        self.wait(0.7)
+
+        self.play(FadeOut(memory1))
+        self.wait(0.7)
+
+        # main block cont
+        m_surr4 = SurroundingRectangle(l10, buff=0.04, color=RED)
+        self.play(ReplacementTransform(mm_surr5, m_surr4))
+        self.wait(0.7)
+
+        memory0.set_color(RED)
+        self.wait(0.7)
+        memory0.set_color(BLUE_B)
+        self.wait(0.7)
+
+        surr2 = SurroundingRectangle(l10, buff=0.04, color=BLUE)
+        self.play(ReplacementTransform(m_surr4, surr2))
+        self.wait(0.7)
+
+        self.play(FadeOut(surr2))
+        self.wait(0.7)
 
         self.wait()
