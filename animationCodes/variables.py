@@ -4,9 +4,7 @@ import math
 class scene(Scene):
     def construct(self):
         Beginning.construct(self)
-
-        RemoveAllObjectsInScreen.construct(self)
-
+        CodeAnalyzer.construct(self)
 
 class Beginning(Scene):
     """
@@ -43,6 +41,13 @@ class CodeAnalyzer(Scene):
         # TODO: add x svg file as a character
 
         ### part 1: example code
+        # draw the code at left side
+        CodeAnalyzer.drawCode(self)
+
+        # draw the memory at right side
+        CodeAnalyzer.drawMemory(self)
+
+    def drawCode(self):
         codeTitle = TextMobject("Example Program:")
         codeTitle.to_edge(LEFT, buff=0.8)
         codeTitle.shift([-0.5, 3.5, 0])
@@ -55,7 +60,7 @@ class CodeAnalyzer(Scene):
 
         line = Line([-6.3, 3.2, 0], [-6.3, -3.8, 0])
 
-        # draw the code
+        # start the code
         code = VGroup()
 
         l1 = TextMobject("\\textrm{static}", "\\textrm{ int}", "\\textrm{ a}", "\\textrm{ = 20;}")
@@ -154,3 +159,41 @@ class CodeAnalyzer(Scene):
         for l in code:
             self.play(FadeInFrom(l, LEFT), run_time=0.5)
         self.wait(1)
+
+
+    def drawMemory(self):
+        pass
+
+class DrawMemory(Scene):
+    def construct(self):
+        a = 2
+        m = TextMobject(f"a")
+        m.scale(1.5)
+        m.set_color(BLUE_B)
+        mm0 = Rectangle(height=1, width=4, color=BLUE)
+        mm = TextMobject(f"{a}")
+        mm0.next_to(m, RIGHT)
+        mm.next_to(m, 4*RIGHT)
+        mm.scale(1.5)
+        mm.set_color(BLUE_B)
+
+        lkjh = VGroup(*[m, mm0, mm])
+        lkjh.shift([2, 0, 0])
+        self.add(lkjh)
+
+        memory = VGroup(
+                    *[
+                        VGroup(
+                            *[
+                                Square(color=BLUE, side_length=1.0),
+                                Rectangle(height=1, width=4, color=BLUE)
+                            ]
+                        ).arrange_submobjects(RIGHT, buff=0)
+                        for i in range(10)
+                    ]
+                ).arrange_submobjects(DOWN, buff=0)
+
+        memory.shift([2, 0, 0])
+        #self.add(memory)
+
+        self.wait()
