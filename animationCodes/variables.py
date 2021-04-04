@@ -5,8 +5,11 @@ class scene(Scene):
     def construct(self):
         Beginning.construct(self)
         CodeAnalyzer.construct(self)
+        RemoveAllObjectsInScreen.construct(self)
         Tips_Local.construct(self)
+        RemoveAllObjectsInScreen.construct(self)
         Tips_Global.construct(self)
+        RemoveAllObjectsInScreen.construct(self)
         Tips_Static.construct(self)
 
 class Beginning(Scene):
@@ -34,6 +37,19 @@ class Beginning(Scene):
         self.wait(2)
         self.play(FadeOut(title_l1), FadeOut(title_l2), FadeOut(line))
         self.wait(1.5)
+
+class RemoveAllObjectsInScreen(Scene):
+    def construct(self):
+        creators = TextMobject("Made by Matin Tavakoli \& Bahar Kaviani")
+        creators.scale(0.4)
+        creators.move_to([5, -3.7, 0])
+        self.add(creators)
+
+        self.play(
+            *[FadeOut(mob)for mob in self.mobjects if mob != creators]
+        )
+
+        self.wait()
 
 class CodeAnalyzer(Scene):
     """
@@ -223,6 +239,10 @@ class CodeAnalyzer(Scene):
         self.wait(1)
 
         # global section
+        globalSection = VGroup(l1, b6)
+        globalBrace = Brace(globalSection, RIGHT, buff=2.4, color=BLUE)
+        self.play(Write(globalBrace))
+
         surr = SurroundingRectangle(l1, buff=0.04, color=BLUE)
         self.play(Write(surr))
         self.wait(0.7)
@@ -231,6 +251,10 @@ class CodeAnalyzer(Scene):
         self.wait(0.7)
 
         # main block
+        mainSection = VGroup(l5, b6)
+        mainBrace = Brace(mainSection, RIGHT, buff=3, color=RED)
+        self.play(Write(mainBrace))
+
         m_surr1 = SurroundingRectangle(l5, buff=0.04, color=RED)
         self.play(ReplacementTransform(surr, m_surr1))
         self.wait(0.7)
@@ -249,6 +273,10 @@ class CodeAnalyzer(Scene):
         self.wait(1)
 
         # inner block in main
+        innerSection = VGroup(b4, b5)
+        innerBrace = Brace(innerSection, LEFT, buff=0.2, color=GREEN)
+        self.play(Write(innerBrace))
+
         mm_surr1 = SurroundingRectangle(b4, buff=0.04, color=GREEN)
         self.play(ReplacementTransform(m_surr3, mm_surr1))
         self.wait(0.7)
@@ -269,6 +297,10 @@ class CodeAnalyzer(Scene):
         self.wait(0.7)
 
         # func block
+        funcSection = VGroup(l2, b2)
+        funcBrace = Brace(funcSection, RIGHT, buff=2.9, color=YELLOW)
+        self.play(Write(funcBrace))
+
         f_surr1 = SurroundingRectangle(l2, buff=0.04, color=YELLOW)
         self.play(Write(f_surr1))
         self.wait(0.7)
@@ -320,7 +352,7 @@ class CodeAnalyzer(Scene):
         memory2.set_color(BLUE_B)
         self.wait(1)
 
-        surr2 = SurroundingRectangle(b6, buff=0.04, color=BLUE)
+        surr2 = SurroundingRectangle(b6, buff=0.04, color=RED)
         self.play(ReplacementTransform(m_surr4, surr2))
         self.wait(0.7)
 
