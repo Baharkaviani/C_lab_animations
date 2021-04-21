@@ -1,8 +1,14 @@
 from manim import *
 import math
+from itertools import chain, zip_longest
+
+fibo_n = 6
+size = (2 ** fibo_n - 1)
+func_call_arr = [-1] * size
+
 
 class Node:
-    def __init__(self, index, key, x, y, node_color, scaling_factor=0.25, opacity=0.3):
+    def __init__(self, index, key, x, y, node_color, function_name, scaling_factor=0.35, opacity=0.3):
         self.key = key
         self.index = index
 
@@ -16,7 +22,7 @@ class Node:
         self.node_obj.set_fill()
         self.node_obj.set_opacity(opacity)
 
-        self.key_obj = TextMobject("fibo(", str(key), ") = ?")
+        self.key_obj = TextMobject(function_name + "(", str(key), ") = ?")
         self.key_obj.move_to([x, y, 0])
         self.key_obj.scale(scaling_factor * 0.8)
 
@@ -30,7 +36,7 @@ class Node:
 
 class Tree:
 
-    def __init__(self, arr, x, y, node_color, hspace=4, vspace=-1):
+    def __init__(self, arr, x, y, node_color, function_name, hspace=4, vspace=-1):
 
         self.x = x
         self.y = y
@@ -53,11 +59,11 @@ class Tree:
         for i, key in enumerate(arr):
 
             if i == 0:
-                node = Node(i, key, self.x, self.y, node_color)
+                node = Node(i, key, self.x, self.y, node_color, function_name)
                 self.node_objs.add(node.node_obj)
                 self.key_objs.add(node.key_obj)
 
-            else:
+            elif key != -1:
 
                 node_height = math.floor(math.log2(i + 1))
                 delta_x = 0.5 ** node_height * hspace
@@ -68,14 +74,15 @@ class Tree:
 
                 delta_y = self.vspace
                 node = None
-                node = Node(i, key, node_parent.node_obj.get_x() + delta_x, node_parent.node_obj.get_y() + delta_y, node_color)
+                node = Node(i, key, node_parent.node_obj.get_x() + delta_x, node_parent.node_obj.get_y() + delta_y,
+                            node_color, function_name)
 
                 self.node_objs.add(node.node_obj)
                 self.key_objs.add(node.key_obj)
 
                 edge = Arrow([node_parent.node_obj.get_x(), node_parent.node_obj.get_y(), 0],
                              [node.node_obj.get_x(), node.node_obj.get_y(), 0])
-                edge.scale(0.93)
+                edge.scale(0.83)
                 if self.left(node_parent.index) == i:
                     node_parent.left_edge = edge
                 else:
@@ -108,6 +115,7 @@ class Tree:
                 run_time=0.3
             )
         scene.play(*[Write(e) for e in self.edges], run_time=1.5)
+
 
 class scene(Scene):
     def construct(self):
@@ -292,6 +300,44 @@ class Factorial(MovingCameraScene):
             self.wait()
 
 
+# def function_call_arr(n):
+#     arr = []
+#     arr.append(n)
+#     if n >= 2:
+#         left_arr = function_call_arr(n - 1)
+#         right_arr = function_call_arr(n - 2)
+#         arr.extend([x if x is not None else -1 for x in chain(*zip_longest(left_arr, right_arr))])
+#     return arr
+
+def parent_func(index, size):
+    return (index - 1) // 2
+
+
+def left_func(index, size):
+    if 2 * index + 1 < size:
+        return 2 * index + 1
+    else:
+        return None
+
+
+def right_func(index, size):
+    if 2 * index + 2 < size:
+        return 2 * index + 2
+    else:
+        return None
+
+
+def function_call_arr(n, size, i):
+    global func_call_arr
+    if i is not None:
+        func_call_arr[i] = n
+        if n >= 2:
+            function_call_arr(n - 1, size, left_func(i, size))
+            function_call_arr(n - 2, size, right_func(i, size))
+        # print(arr)
+    return func_call_arr
+
+
 class Fibonacci(ZoomedScene):
     """
     Fibonacci Function.
@@ -351,9 +397,9 @@ class Fibonacci(ZoomedScene):
         code.add(l3)
 
         l4 = TextMobject("    \\textrm{ return}", "\\textrm{ fibonacci}", "\\textrm{(}",
-                         "\\textrm{n}", "\\textrm{ - 2)}", "\\textrm{ +}", "\\textrm{ fibonacci}", "\\textrm{(}",
+                         "\\textrm{n}", "\\textrm{ - 1)}", "\\textrm{ +}", "\\textrm{ fibonacci}", "\\textrm{(}",
                          "\\textrm{n}",
-                         "\\textrm{ - 1);}")
+                         "\\textrm{ - 2);}")
         for i, color in zip(l4,
                             [PURPLE_C, GOLD_C, WHITE, RED_E, WHITE, WHITE, GOLD_C, WHITE, RED_E, WHITE]):
             i.set_color(color)
@@ -400,10 +446,15 @@ class Fibonacci(ZoomedScene):
         rect = new_rect
         self.wait(0.7)
 
-        n = 3  # TODO: store it in a list?
+        # n = 4  # TODO: store it in a list?
 
-        calls = [3, 1, 2, -1, -1, 0, 1]
-        fibo_tree = Tree(calls, 0, 2, hspace=3, node_color=ORANGE)
+        # calls = [3, 2, 1, 1, 0, -1, -1]
+        # calls = [6, 5, 4, 4, 3, 3, 2, 3, 2, 2, 1, 2, 1, 1, 0, 2, 1, 1, 0, 1, 0, -1, -1, 1, 0, -1, -1, -1, -1, -1, -1, 1, 0]
+
+        calls = function_call_arr(fibo_n, size, 0)  # generalized!
+
+        function_name = "fibo"
+        fibo_tree = Tree(calls, 0, 2, ORANGE, function_name, hspace=12)
 
         fibo_tree.sketch_heap(self)
 
@@ -450,11 +501,11 @@ class Fibonacci(ZoomedScene):
         #     node_child2.set_color(ORANGE)
         #     node_child2.set_opacity(0.3)
         #
-        #     val_child1 = TextMobject("fibo(", str(n - 2), ") = ?")
+        #     val_child1 = TextMobject("fibo(", str(n - 1), ") = ?")
         #     val_child1.move_to([-1.5, 1.5, 0])
         #     val_child1.scale(0.2)
         #
-        #     val_child2 = TextMobject("fibo(", str(n - 1), ") = ?")
+        #     val_child2 = TextMobject("fibo(", str(n - 2), ") = ?")
         #     val_child2.move_to([1.5, 1.5, 0])
         #     val_child2.scale(0.2)
         #
