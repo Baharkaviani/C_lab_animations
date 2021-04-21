@@ -1,14 +1,13 @@
 from manim import *
 import math
-from itertools import chain, zip_longest
 
-fibo_n = 6
+fibo_n = 5
 size = (2 ** fibo_n - 1)
 func_call_arr = [-1] * size
 
 
 class Node:
-    def __init__(self, index, key, x, y, node_color, function_name, scaling_factor=0.35, opacity=0.3):
+    def __init__(self, index, key, x, y, node_color, function_name, scaling_factor=0.25, opacity=0.3):
         self.key = key
         self.index = index
 
@@ -107,8 +106,18 @@ class Tree:
         else:
             return None
 
-    def sketch_heap(self, scene):
+    def sketch_tree(self, scene):
         for node_obj, key_obj in zip(self.node_objs, self.key_objs):
+            scene.play(
+                Write(node_obj),
+                Write(key_obj),
+                run_time=0.3
+            )
+        scene.play(*[Write(e) for e in self.edges], run_time=1.5)
+
+    # sketch part of the nodes
+    def sketch_nodes(self, scene, node_objs, key_objs):
+        for node_obj, key_obj in zip(node_objs, key_objs):
             scene.play(
                 Write(node_obj),
                 Write(key_obj),
@@ -300,15 +309,6 @@ class Factorial(MovingCameraScene):
             self.wait()
 
 
-# def function_call_arr(n):
-#     arr = []
-#     arr.append(n)
-#     if n >= 2:
-#         left_arr = function_call_arr(n - 1)
-#         right_arr = function_call_arr(n - 2)
-#         arr.extend([x if x is not None else -1 for x in chain(*zip_longest(left_arr, right_arr))])
-#     return arr
-
 def parent_func(index, size):
     return (index - 1) // 2
 
@@ -385,23 +385,25 @@ class Fibonacci(ZoomedScene):
             i.set_color(color)
         code.add(l1)
 
-        l2 = TextMobject("    \\textrm{ if}", "\\textrm{(}", "\\textrm{n}", "\\textrm{ == 1 ||}", "\\textrm{ n}",
-                         "\\textrm{ == 2)}")
-        for i, color in zip(l2, [PURPLE_C, WHITE, RED_E, WHITE, RED_E, WHITE]):
+        l2 = TextMobject("    \\textrm{ if}", "\\textrm{(}", "\\textrm{n}", "\\textrm{ == }", "1", "\\textrm{ ||}",
+                         "\\textrm{ n}",
+                         "\\textrm{ == }", "2", ")")
+        for i, color in zip(l2, [PURPLE_C, WHITE, RED_E, WHITE, BLUE, WHITE, RED_E, WHITE, BLUE, WHITE]):
             i.set_color(color)
         code.add(l2)
 
-        l3 = TextMobject("        \\textrm{ return}", "\\textrm{ 1;}")
-        for i, color in zip(l3, [PURPLE_C, WHITE]):
+        l3 = TextMobject("        \\textrm{ return}", " 1", "\\textrm{;}")
+        for i, color in zip(l3, [PURPLE_C, BLUE, WHITE]):
             i.set_color(color)
         code.add(l3)
 
         l4 = TextMobject("    \\textrm{ return}", "\\textrm{ fibonacci}", "\\textrm{(}",
-                         "\\textrm{n}", "\\textrm{ - 1)}", "\\textrm{ +}", "\\textrm{ fibonacci}", "\\textrm{(}",
+                         "\\textrm{n}", "\\textrm{ - }", "1", "\\textrm{) +}", "\\textrm{ fibonacci}", "\\textrm{(}",
                          "\\textrm{n}",
-                         "\\textrm{ - 2);}")
+                         "\\textrm{ - }", "2", ");")
         for i, color in zip(l4,
-                            [PURPLE_C, GOLD_C, WHITE, RED_E, WHITE, WHITE, GOLD_C, WHITE, RED_E, WHITE]):
+                            [PURPLE_C, GOLD_C, WHITE, RED_E, WHITE, BLUE, WHITE, GOLD_C, WHITE, RED_E, WHITE, BLUE,
+                             WHITE]):
             i.set_color(color)
         code.add(l4)
 
@@ -454,185 +456,169 @@ class Fibonacci(ZoomedScene):
         calls = function_call_arr(fibo_n, size, 0)  # generalized!
 
         function_name = "fibo"
-        fibo_tree = Tree(calls, 0, 2, ORANGE, function_name, hspace=12)
+        fibo_tree = Tree(calls, -2, 1, ORANGE, function_name, hspace=6)
 
-        fibo_tree.sketch_heap(self)
+        # node_objs = fibo_tree.node_objs[:1]
+        # key_objs = fibo_tree.key_objs[:1]
 
-        # if n == 1:
-        #     new_rect = SurroundingRectangle(l3, buff=0.04, color=RED)
-        #     self.play(ReplacementTransform(rect, new_rect))
-        #     rect = new_rect
-        #     self.wait(0.7)
-        #
-        # else:
-        #     new_rect = SurroundingRectangle(l4, buff=0.04, color=RED)
-        #     self.play(ReplacementTransform(rect, new_rect))
-        #     rect = new_rect
-        #     self.wait(0.7)
-        #
-        #     # Set camera
-        #     zoomed_camera = self.zoomed_camera
-        #     zoomed_display = self.zoomed_display
-        #     frame = zoomed_camera.frame
-        #     zoomed_display_frame = zoomed_display.display_frame
-        #
-        #     root = Circle()  # TODO: is circle the best shape?
-        #     root.move_to([0, 2, 0])
-        #     root.scale(0.25)
-        #     root.set_color(ORANGE)
-        #     root.set_opacity(0.3)
-        #
-        #     val = TextMobject("fib(", str(n), ") = ?")
-        #     val.move_to([0, 2, 0])
-        #     val.scale(0.2)
-        #
-        #     self.play(ShowCreation(root), Write(val))
-        #
-        #     node_child1 = Circle()  # TODO: is circle the best shape?
-        #     node_child1.move_to([-1.5, 1.5, 0])
-        #     node_child1.scale(0.25)
-        #     node_child1.set_color(ORANGE)
-        #     node_child1.set_fill()
-        #     node_child1.set_opacity(0.3)
-        #
-        #     node_child2 = Circle()  # TODO: is circle the best shape?
-        #     node_child2.move_to([1.5, 1.5, 0])
-        #     node_child2.scale(0.25)
-        #     node_child2.set_color(ORANGE)
-        #     node_child2.set_opacity(0.3)
-        #
-        #     val_child1 = TextMobject("fibo(", str(n - 1), ") = ?")
-        #     val_child1.move_to([-1.5, 1.5, 0])
-        #     val_child1.scale(0.2)
-        #
-        #     val_child2 = TextMobject("fibo(", str(n - 2), ") = ?")
-        #     val_child2.move_to([1.5, 1.5, 0])
-        #     val_child2.scale(0.2)
-        #
-        #     edge1 = Line([root.get_x(), root.get_y(), 0],
-        #                  [node_child1.get_x(), node_child1.get_y(), 0])  # TODO: arrow head is too big!
-        #     edge2 = Line([root.get_x(), root.get_y(), 0],
-        #                  [node_child2.get_x(), node_child2.get_y(), 0])  # TODO: arrow head is too big!
-        #
-        #     edge1.scale(0.7)
-        #     edge2.scale(0.7)
-        #
-        #     cluster = VGroup(root, node_child1, node_child2)
-        #
-        #     frame.move_to(cluster)
-        #     frame.set_color(YELLOW)
-        #
-        #     zoomed_display_frame.set_color(YELLOW)
-        #     zoomed_display.shift(3 * RIGHT + 2 * UP)
-        #
-        #     # background zoomed_display
-        #     zd_rect = BackgroundRectangle(
-        #         zoomed_display,
-        #         fill_opacity=0,
-        #         buff=MED_SMALL_BUFF,
-        #     )
-        #
-        #     self.add_foreground_mobject(zd_rect)
-        #
-        #     # animation of unfold camera
-        #     unfold_camera = UpdateFromFunc(
-        #         zd_rect,
-        #         lambda rect: rect.replace(zoomed_display)
-        #     )
-        #
-        #     # Scale in     x   y  z
-        #     # to put it short, the ratios must be exactly the same. Otherwise, the frame will scale like the zoomed display
-        #     frame_scale_factor = [8, 3, 0]
-        #     zd_scale_factor = [2.66, 1, 0]
-        #
-        #     zoomed_display.scale(zd_scale_factor)
-        #
-        #     self.play(
-        #         ShowCreation(frame),
-        #         frame.animate.scale(frame_scale_factor),
-        #         # zoomed_display.animate.scale(scale_factor),
-        #     )
-        #
-        #     # Activate zooming
-        #     self.activate_zooming()
-        #
-        #     self.play(
-        #         # You have to add this line
-        #         self.get_zoomed_display_pop_out_animation(),
-        #         unfold_camera
-        #     )
-        #
-        #     self.wait()
-        #
-        #     self.play(
-        #         Write(node_child1),
-        #         Write(val_child1),
-        #         Write(node_child2),
-        #         Write(val_child2),
-        #     )
-        #
-        #     self.wait(0.5)
-        #
-        #     self.play(
-        #         ShowCreation(edge1),
-        #         ShowCreation(edge2),
-        #     )
-        #
-        #     self.wait()
-        #
-        #     flickering_edge = edge1.copy()
-        #     flickering_edge.set_color(GREEN_SCREEN)
-        #
-        #     self.play(ShowCreation(flickering_edge), rate_func=lambda t: smooth(t), run_time=0.5)
-        #
-        #     self.wait(0.2)
-        #
-        #     # self.play(Uncreate(flickering_edge), rate_func=lambda t: smooth(1 - t))
-        #     self.play(
-        #         Uncreate(flickering_edge.set_points(flickering_edge.get_points()[::-1])),
-        #               rate_func=lambda t: smooth(1 - t), run_time=0.5)
-        #
-        #     self.wait(0.2)
-        #
-        #     self.play(
-        #         frame.animate.move_to(node)
-        #     )
-        #
-        #     # zoomed_camera_text.next_to(zoomed_display_frame, DOWN)
-        #     # self.play(FadeIn(zoomed_camera_text))
-        #
-        #     # # Scale in     x   y  z
-        #     # scale_factor = [0.5, 1.5, 0]
-        #     #
-        #     # # Resize the frame and zoomed camera
-        #     # self.play(
-        #     #     frame.animate.scale(scale_factor),
-        #     #     zoomed_display.animate.scale(scale_factor),
-        #     #     # FadeOut(zoomed_camera_text),
-        #     #     # FadeOut(frame_text)
-        #     # )
-        #     #
-        #     # # Resize the frame
-        #     # self.play(
-        #     #     frame.animate.scale(3),
-        #     #     frame.animate.shift(2.5 * DOWN)
-        #     # )
-        #     #
-        #     # # Resize zoomed camera
-        #     # self.play(
-        #     #     ScaleInPlace(zoomed_display, 2)
-        #     # )
-        #     #
-        #     # self.wait()
-        #     #
-        #     # self.play(
-        #     #     self.get_zoomed_display_pop_out_animation(),
-        #     #     unfold_camera,
-        #     #     # -------> Inverse
-        #     #     rate_func=lambda t: smooth(1 - t),
-        #     # )
-        #     # self.play(
-        #     #     Uncreate(zoomed_display_frame),
-        #     #     Uncreate(frame),
-        #     # )
-        #     # self.wait()
+        # fibo_tree.sketch_tree(self)
+        # fibo_tree.sketch_nodes(self, node_objs, key_objs)
+
+        if fibo_n == 1:
+            new_rect = SurroundingRectangle(l3, buff=0.04, color=RED)
+            self.play(ReplacementTransform(rect, new_rect))
+            rect = new_rect
+            self.wait(0.7)
+
+        else:
+            new_rect = SurroundingRectangle(l4, buff=0.04, color=RED)
+            self.play(ReplacementTransform(rect, new_rect))
+            rect = new_rect
+            self.wait(0.7)
+
+            # keeping scaling values
+            frame_scale_factor_list = [[16, 4, 0], [8 / 16, 4, 0], [5 / 8, 4, 0], [3 / 5, 4, 0]]
+            zd_scale_factor_list = [[4, 1, 0], [2 / 4, 1, 0], [2 / 2, 1.6, 0], [1.5 / 2, 2, 0]]
+
+            # indices = [0, 1, 3, 7, 4, 2, 5]  # indices that extraction occurs (TODO: function for this? :) )
+            indices = [0, 1, 3]  # indices that extraction occurs (TODO: function for this? :) )
+
+            for i, index in enumerate(indices):
+                root = fibo_tree.arr[index]  # TODO: is circle the best shape?
+
+                if index == 0:
+                    self.play(
+                        Write(root.node_obj),
+                        Write(root.key_obj),
+                    )
+
+                left_child = fibo_tree.arr[fibo_tree.left(index)]
+                right_child = fibo_tree.arr[fibo_tree.right(index)]
+
+                cluster = VGroup(root.node_obj, left_child.node_obj, right_child.node_obj)
+
+                # Set camera
+                zoomed_camera = self.zoomed_camera
+                zoomed_display = self.zoomed_display
+                frame = zoomed_camera.frame
+                zoomed_display_frame = zoomed_display.display_frame
+
+                zoomed_display_shift_list = [[2 * UP], [RIGHT], [0 * RIGHT], [-1 * UP]]
+
+                frame.move_to(cluster)
+                frame.set_color(YELLOW)
+
+                zoomed_display_frame.set_color(YELLOW)
+                zoomed_display.shift(zoomed_display_shift_list[i])  # TODO: test and check propagating effect
+
+                # background zoomed_display
+                zd_rect = BackgroundRectangle(
+                    zoomed_display,
+                    fill_opacity=0,
+                    buff=MED_SMALL_BUFF,
+                )
+
+                self.add_foreground_mobject(zd_rect)
+
+                # animation of unfold camera
+                unfold_camera = UpdateFromFunc(
+                    zd_rect,
+                    lambda rect: rect.replace(zoomed_display)
+                )
+
+                # Scale in     x   y  z
+                # to put it short, the ratios must be exactly the same. Otherwise, the frame will scale like the zoomed display
+                frame_scale_factor = frame_scale_factor_list[i]  # TODO: test and check propagating effect
+                zd_scale_factor = zd_scale_factor_list[i]  # TODO: test and check propagating effect
+
+                zoomed_display.scale(zd_scale_factor)
+
+                self.play(
+                    ShowCreation(frame),
+                    frame.animate.scale(frame_scale_factor),
+                    # zoomed_display.animate.scale(scale_factor),
+                )
+
+                # Activate zooming
+                self.activate_zooming()
+
+                self.play(
+                    # You have to add this line
+                    self.get_zoomed_display_pop_out_animation(),
+                    unfold_camera
+                )
+
+                self.wait()
+
+                self.play(
+                    Write(left_child.node_obj),
+                    Write(left_child.key_obj),
+                    Write(right_child.node_obj),
+                    Write(right_child.key_obj),
+                )
+
+                self.wait(0.5)
+
+                self.play(
+                    Write(root.left_edge),
+                    Write(root.right_edge),
+                )
+
+                self.wait()
+
+                # flickering_edge = edge1.copy()
+                # flickering_edge.set_color(GREEN_SCREEN)
+                #
+                # self.play(ShowCreation(flickering_edge), rate_func=lambda t: smooth(t), run_time=0.5)
+                #
+                # self.wait(0.2)
+                #
+                # # self.play(Uncreate(flickering_edge), rate_func=lambda t: smooth(1 - t))
+                # self.play(
+                #     Uncreate(flickering_edge.set_points(flickering_edge.get_points()[::-1])),
+                #           rate_func=lambda t: smooth(1 - t), run_time=0.5)
+                #
+                # self.wait(0.2)
+                #
+                # self.play(
+                #     frame.animate.move_to(node)
+                # )
+                #
+                # # zoomed_camera_text.next_to(zoomed_display_frame, DOWN)
+                # # self.play(FadeIn(zoomed_camera_text))
+                #
+                # # # Scale in     x   y  z
+                # # scale_factor = [0.5, 1.5, 0]
+                # #
+                # # # Resize the frame and zoomed camera
+                # # self.play(
+                # #     frame.animate.scale(scale_factor),
+                # #     zoomed_display.animate.scale(scale_factor),
+                # #     # FadeOut(zoomed_camera_text),
+                # #     # FadeOut(frame_text)
+                # # )
+                # #
+                # # # Resize the frame
+                # # self.play(
+                # #     frame.animate.scale(3),
+                # #     frame.animate.shift(2.5 * DOWN)
+                # # )
+                # #
+                # # # Resize zoomed camera
+                # # self.play(
+                # #     ScaleInPlace(zoomed_display, 2)
+                # # )
+                # #
+                # # self.wait()
+                # #
+                # # self.play(
+                # #     self.get_zoomed_display_pop_out_animation(),
+                # #     unfold_camera,
+                # #     # -------> Inverse
+                # #     rate_func=lambda t: smooth(1 - t),
+                # # )
+                # # self.play(
+                # #     Uncreate(zoomed_display_frame),
+                # #     Uncreate(frame),
+                # # )
+                # # self.wait()
