@@ -487,7 +487,7 @@ class Fibonacci(ZoomedScene):
             # keeping scaling values
             frame_scale_factor_list = [[16, 4, 0], [8 / 16, 4, 0], [5 / 8, 4, 0], [3 / 5, 4, 0], [5 / 3, 4, 0], [8 / 5, 4, 0], [5 / 8, 4, 0]]
             zd_scale_factor_list = [[4, 1, 0], [2 / 4, 1, 0], [2 / 2, 1.6, 0], [1.5 / 2, 2 / 1.6, 0], [2 / 1.5, 1.6 / 2, 0], [2 / 2, 1 / 1.6, 0], [2 / 2, 1.6, 0]]
-            zoomed_display_shift_list = [2 * UP, RIGHT, 0 * RIGHT, -1 * UP, UP, 0 * RIGHT, 0 * RIGHT]
+            zoomed_display_shift_list = [2 * UP, RIGHT + 2 * DOWN, 2 * DOWN, 0 * DOWN, 2 * UP, 0 * UP, 0 * RIGHT]  # TODO: sth is wrong in index=7 (zoomed_scene frame goes out of the screen)
             # background zoomed_display
             zd_rect = BackgroundRectangle(
                 zoomed_display,
@@ -592,11 +592,6 @@ class Fibonacci(ZoomedScene):
                     rate_func=lambda t: smooth(1 - t), run_time=0.5)
 
                 self.wait(0.2)
-
-                if left_func(index, size) is not None and calls[left_func(index, size)] != -1:  # go down the tree, only if you haven't reached the leaves
-                    self.play(
-                        frame.animate.move_to(left_child.node_obj)
-                    )
 
                 # zoomed_camera_text.next_to(zoomed_display_frame, DOWN)
                 # self.play(FadeIn(zoomed_camera_text))
