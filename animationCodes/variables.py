@@ -14,6 +14,7 @@ class scene(Scene):
         Tips_Global.construct(self)
         RemoveAllObjectsInScreen.construct(self)
         Tips_Static.construct(self)
+        Thanks.construct(self)
 
 class Beginning(Scene):
     """
@@ -24,7 +25,7 @@ class Beginning(Scene):
         global creators
 
         title_l1 = TextMobject("Local, Global and Static")
-        title_l2 = TextMobject("Session 9")
+        title_l2 = TextMobject("Session 8")
         title_l1.scale(1.8)
         title_l2.scale(1.3)
         title_l1.shift([0, 0.5, 0])
@@ -50,6 +51,14 @@ class RemoveAllObjectsInScreen(Scene):
         )
 
         self.wait()
+
+class Thanks(Scene):
+    def construct(self):
+        thank = TextMobject("Thanks for Watching")
+        thank.to_edge(LEFT, buff=5)
+        thank.shift([-0.5, 0.5, 0])
+        thank.scale(2)
+        self.play(Write(thank))
 
 class CodeAnalyzer(Scene):
     """
