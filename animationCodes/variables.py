@@ -269,11 +269,6 @@ class CodeAnalyzer(Scene):
         self.play(ReplacementTransform(m_surr2, m_surr3))
         self.wait(0.7)
 
-        memory0.set_color(RED)
-        self.wait(1)
-        memory0.set_color(BLUE_B)
-        self.wait(1)
-
         # inner block in main
         innerSection = VGroup(firstExampleCode[9], firstExampleCode[13])
         innerBrace = Brace(innerSection, LEFT, buff=0.2, color=GREEN)
@@ -315,18 +310,15 @@ class CodeAnalyzer(Scene):
         self.play(ReplacementTransform(f_surr2, f_surr3))
         self.wait(0.7)
 
-        memory0.set_color(YELLOW)
-        self.wait(0.7)
-
-        f_surr4 = SurroundingRectangle(l4, buff=0.04, color=YELLOW)
+        f_surr4 = SurroundingRectangle(firstExampleCode[4], buff=0.04, color=YELLOW)
         self.play(ReplacementTransform(f_surr3, f_surr4))
         self.wait(0.7)
 
         a1 = 100
         self.remove(m0_val)
         self.add(memory2)
-        self.play(FadeOut(m0, m0_text))
         memory2.set_color(BLUE_B)
+        self.play(FadeOut(m0, m0_text))
         self.wait(1)
 
         f_surr5 = SurroundingRectangle(firstExampleCode[5], buff=0.04, color=YELLOW)
@@ -334,6 +326,7 @@ class CodeAnalyzer(Scene):
         self.wait(0.7)
 
         self.play(FadeOut(f_surr5))
+        self.play(FadeOut(funcBrace))
         self.wait(0.7)
 
         # inner block in main cont
@@ -349,16 +342,13 @@ class CodeAnalyzer(Scene):
         self.play(ReplacementTransform(mm_surr5, m_surr4))
         self.wait(0.7)
 
-        memory2.set_color(RED)
-        self.wait(1)
-        memory2.set_color(BLUE_B)
-        self.wait(1)
-
-        surr2 = SurroundingRectangle(b6, buff=0.04, color=RED)
+        surr2 = SurroundingRectangle(firstExampleCode[15], buff=0.04, color=RED)
         self.play(ReplacementTransform(m_surr4, surr2))
         self.wait(0.7)
 
         self.play(FadeOut(surr2))
+        self.play(FadeOut(mainBrace))
+        self.play(FadeOut(globalBrace))
         self.wait(0.7)
 
         self.wait()
