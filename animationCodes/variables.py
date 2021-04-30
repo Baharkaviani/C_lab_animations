@@ -1,6 +1,9 @@
 from manim import *
 import math
 
+creators = None
+firstExampleCode = None
+
 class scene(Scene):
     def construct(self):
         Beginning.construct(self)
@@ -18,6 +21,8 @@ class Beginning(Scene):
     """
     def construct(self):
         ### part 0: Title
+        global creators
+
         title_l1 = TextMobject("Local, Global and Static")
         title_l2 = TextMobject("Session 9")
         title_l1.scale(1.8)
@@ -40,11 +45,6 @@ class Beginning(Scene):
 
 class RemoveAllObjectsInScreen(Scene):
     def construct(self):
-        creators = TextMobject("Made by Matin Tavakoli \& Bahar Kaviani")
-        creators.scale(0.4)
-        creators.move_to([5, -3.7, 0])
-        self.add(creators)
-
         self.play(
             *[FadeOut(mob)for mob in self.mobjects if mob != creators]
         )
@@ -56,11 +56,10 @@ class CodeAnalyzer(Scene):
     Analyze one code to show differences between local, global and static variables.
     """
     def construct(self):
-        ### part 0: introduction
-        # TODO: add x svg file as a character
+        ### part 0: example code
+        global firstExampleCode
 
-        ### part 1: example code
-        # part 1: draw the code at left side
+        # part 0: draw the code at left side
         codeTitle = TextMobject("Example Program:")
         codeTitle.to_edge(LEFT, buff=0.8)
         codeTitle.shift([-0.5, 3.5, 0])
@@ -74,106 +73,106 @@ class CodeAnalyzer(Scene):
         line = Line([-6.3, 3.2, 0], [-6.3, -3.8, 0])
 
         # start the code
-        code = VGroup()
+        firstExampleCode = VGroup()
 
         l1 = TextMobject("\\textrm{static}", "\\textrm{ int}", "\\textrm{ a}", "\\textrm{ = 20;}")
         for i, color in zip(l1, [YELLOW_C, BLUE, RED_E, WHITE]):
             i.set_color(color)
-        code.add(l1)
+        firstExampleCode.add(l1) #0
 
         l2 = TextMobject("\\textrm{void}", "\\textrm{ func}", "\\textrm{()}")
         for i, color in zip(l2, [BLUE, PURPLE_C, WHITE]):
             i.set_color(color)
-        code.add(l2)
+        firstExampleCode.add(l2) #1
 
         b1 = TextMobject("\\textrm{\\{}")
         b1.set_color(color, WHITE)
-        code.add(b1)
+        firstExampleCode.add(b1) #2
 
         l3 = TextMobject("    \\textrm{printf}", "\\textrm{(}", "\\textrm{ \"\%d, \"}", "\\textrm{,}",
                          "\\textrm{ a}", "\\textrm{ );}")
         for i, color in zip(l3, [PURPLE_C, WHITE, GREEN, WHITE, RED_E, WHITE]):
             i.set_color(color)
-        code.add(l3)
+        firstExampleCode.add(l3) #3
 
         l4 = TextMobject("    \\textrm{a}", "\\textrm{ = 100;}")
         for i, color in zip(l4, [RED_E, WHITE]):
             i.set_color(color)
-        code.add(l4)
+        firstExampleCode.add(l4) #4
 
         b2 = TextMobject("\\textrm{\\}}")
         b2.set_color(color, WHITE)
-        code.add(b2)
+        firstExampleCode.add(b2) #5
 
         l5 = TextMobject("\\textrm{int}", "\\textrm{ main}", "\\textrm{()}")
         for i, color in zip(l5, [BLUE, PURPLE_C, WHITE]):
             i.set_color(color)
-        code.add(l5)
+        firstExampleCode.add(l5) #6
 
         b3 = TextMobject("\\textrm{\\{}")
         b3.set_color(color, WHITE)
-        code.add(b3)
+        firstExampleCode.add(b3) #7
 
         l6 = TextMobject("    \\textrm{printf}", "\\textrm{(}", "\\textrm{ \"\%d, \"}", "\\textrm{,}",
                          "\\textrm{ a}", "\\textrm{ );}")
         for i, color in zip(l6, [PURPLE_C, WHITE, GREEN, WHITE, RED_E, WHITE]):
             i.set_color(color)
-        code.add(l6)
+        firstExampleCode.add(l6) #8
 
         b4 = TextMobject("    \\textrm{\\{}")
         b4.set_color(color, WHITE)
-        code.add(b4)
+        firstExampleCode.add(b4) #9
 
         l7 = TextMobject("        \\textrm{static}", "\\textrm{ int}", "\\textrm{ a}", "\\textrm{ = 10;}")
         for i, color in zip(l7, [YELLOW_C, BLUE, RED_E, WHITE]):
             i.set_color(color)
-        code.add(l7)
+        firstExampleCode.add(l7) #10
 
         l8 = TextMobject("        \\textrm{printf}", "\\textrm{(}", "\\textrm{ \"\%d, \"}", "\\textrm{,}",
                          "\\textrm{ a}", "\\textrm{ );}")
         for i, color in zip(l8, [PURPLE_C, WHITE, GREEN, WHITE, RED_E, WHITE]):
             i.set_color(color)
-        code.add(l8)
+        firstExampleCode.add(l8) #11
 
         l9 = TextMobject("        \\textrm{func}", "\\textrm{();}")
         for i, color in zip(l9, [PURPLE_C, WHITE]):
             i.set_color(color)
-        code.add(l9)
+        firstExampleCode.add(l9) #12
 
         b5 = TextMobject("    \\textrm{\\}}")
         b5.set_color(color, WHITE)
-        code.add(b5)
+        firstExampleCode.add(b5) #13
 
         l10 = TextMobject("    \\textrm{printf}", "\\textrm{(}", "\\textrm{ \"\%d, \"}", "\\textrm{,}",
                          "\\textrm{ a}", "\\textrm{ );}")
         for i, color in zip(l10, [PURPLE_C, WHITE, GREEN, WHITE, RED_E, WHITE]):
             i.set_color(color)
-        code.add(l10)
+        firstExampleCode.add(l10) #14
 
         b6 = TextMobject("\\textrm{\\}}")
         b6.set_color(color, WHITE)
-        code.add(b6)
+        firstExampleCode.add(b6) #15
 
-        for i, l in enumerate(code):
+        for i, l in enumerate(firstExampleCode):
             l.to_edge(LEFT, buff=0.7)
             l.shift([0.2 * (len(l[0].get_tex_string()) - len(l[0].get_tex_string().lstrip())), -0.55 * i + 0.65, 0])
 
-        code.scale(0.8)
-        code.shift([0, 3, 0])
+        firstExampleCode.scale(0.8)
+        firstExampleCode.shift([0, 3, 0])
 
-        l1_x = code[0].get_x() + 0.11  # keeping it as temp value
-        l1_y = code[0].get_y()  # keeping it as temp value
+        l1_x = firstExampleCode[0].get_x() + 0.11  # keeping it as temp value
+        l1_y = firstExampleCode[0].get_y()  # keeping it as temp value
 
-        l2_x = code[1].get_x() + 0.11  # keeping it as temp value
-        l2_y = code[1].get_y()  # keeping it as temp value
+        l2_x = firstExampleCode[1].get_x() + 0.11  # keeping it as temp value
+        l2_y = firstExampleCode[1].get_y()  # keeping it as temp value
 
         self.play(FadeInFrom(line, DOWN))
 
-        for l in code:
-            self.play(FadeInFrom(l, LEFT), run_time=0.3)
+        for l in firstExampleCode:
+            self.play(FadeInFrom(l, LEFT), run_time=0.2)
         self.wait(1)
 
-        # part 1: draw the memory at right side
+        # part 0: draw the memory at right side
         a1 = 20
 
         m0_text = TextMobject(f"a")
@@ -188,7 +187,7 @@ class CodeAnalyzer(Scene):
         memory0.shift([2, 3, 0])
         memory0.set_color(BLUE_B)
 
-        # second a (inner block of mani)
+        # second a (inner block of main)
         a2 = 10
 
         m1_text = TextMobject(f"a")
@@ -218,7 +217,6 @@ class CodeAnalyzer(Scene):
         memory2.shift([2, 3, 0])
         memory2.set_color(YELLOW)
 
-        # part 1: start the analyze
         # TODO: organize the memory
         memory = VGroup(
                     *[
@@ -238,12 +236,16 @@ class CodeAnalyzer(Scene):
         self.play(FadeOut(memory))
         self.wait(1)
 
+        # part 1: start the analyze
+        CodeAnalyzer.analyzer(self, memory0, memory1, memory2, m0, m0_text, m0_val)
+
+    def analyzer(self, memory0, memory1, memory2, m0, m0_text, m0_val):
         # global section
-        globalSection = VGroup(l1, b6)
+        globalSection = VGroup(firstExampleCode[0], firstExampleCode[15])
         globalBrace = Brace(globalSection, RIGHT, buff=2.4, color=BLUE)
         self.play(Write(globalBrace))
 
-        surr = SurroundingRectangle(l1, buff=0.04, color=BLUE)
+        surr = SurroundingRectangle(firstExampleCode[0], buff=0.04, color=BLUE)
         self.play(Write(surr))
         self.wait(0.7)
 
@@ -251,19 +253,19 @@ class CodeAnalyzer(Scene):
         self.wait(0.7)
 
         # main block
-        mainSection = VGroup(l5, b6)
+        mainSection = VGroup(firstExampleCode[6], firstExampleCode[15])
         mainBrace = Brace(mainSection, RIGHT, buff=3, color=RED)
         self.play(Write(mainBrace))
 
-        m_surr1 = SurroundingRectangle(l5, buff=0.04, color=RED)
+        m_surr1 = SurroundingRectangle(firstExampleCode[6], buff=0.04, color=RED)
         self.play(ReplacementTransform(surr, m_surr1))
         self.wait(0.7)
 
-        m_surr2 = SurroundingRectangle(b3, buff=0.04, color=RED)
+        m_surr2 = SurroundingRectangle(firstExampleCode[7], buff=0.04, color=RED)
         self.play(ReplacementTransform(m_surr1, m_surr2))
         self.wait(0.7)
 
-        m_surr3 = SurroundingRectangle(l6, buff=0.04, color=RED)
+        m_surr3 = SurroundingRectangle(firstExampleCode[8], buff=0.04, color=RED)
         self.play(ReplacementTransform(m_surr2, m_surr3))
         self.wait(0.7)
 
@@ -273,43 +275,43 @@ class CodeAnalyzer(Scene):
         self.wait(1)
 
         # inner block in main
-        innerSection = VGroup(b4, b5)
+        innerSection = VGroup(firstExampleCode[9], firstExampleCode[13])
         innerBrace = Brace(innerSection, LEFT, buff=0.2, color=GREEN)
         self.play(Write(innerBrace))
 
-        mm_surr1 = SurroundingRectangle(b4, buff=0.04, color=GREEN)
+        mm_surr1 = SurroundingRectangle(firstExampleCode[9], buff=0.04, color=GREEN)
         self.play(ReplacementTransform(m_surr3, mm_surr1))
         self.wait(0.7)
 
-        mm_surr2 = SurroundingRectangle(l7, buff=0.04, color=GREEN)
+        mm_surr2 = SurroundingRectangle(firstExampleCode[10], buff=0.04, color=GREEN)
         self.play(ReplacementTransform(mm_surr1, mm_surr2))
         self.wait(0.7)
 
         self.play(FadeInFrom(memory1))
         self.wait(0.7)
 
-        mm_surr3 = SurroundingRectangle(l8, buff=0.04, color=GREEN)
+        mm_surr3 = SurroundingRectangle(firstExampleCode[11], buff=0.04, color=GREEN)
         self.play(ReplacementTransform(mm_surr2, mm_surr3))
         self.wait(0.7)
 
-        mm_surr4 = SurroundingRectangle(l9, buff=0.04, color=GREEN)
+        mm_surr4 = SurroundingRectangle(firstExampleCode[12], buff=0.04, color=GREEN)
         self.play(ReplacementTransform(mm_surr3, mm_surr4))
         self.wait(0.7)
 
         # func block
-        funcSection = VGroup(l2, b2)
+        funcSection = VGroup(firstExampleCode[1], firstExampleCode[5])
         funcBrace = Brace(funcSection, RIGHT, buff=2.9, color=YELLOW)
         self.play(Write(funcBrace))
 
-        f_surr1 = SurroundingRectangle(l2, buff=0.04, color=YELLOW)
+        f_surr1 = SurroundingRectangle(firstExampleCode[1], buff=0.04, color=YELLOW)
         self.play(Write(f_surr1))
         self.wait(0.7)
 
-        f_surr2 = SurroundingRectangle(b1, buff=0.04, color=YELLOW)
+        f_surr2 = SurroundingRectangle(firstExampleCode[2], buff=0.04, color=YELLOW)
         self.play(ReplacementTransform(f_surr1, f_surr2))
         self.wait(0.7)
 
-        f_surr3 = SurroundingRectangle(l3, buff=0.04, color=YELLOW)
+        f_surr3 = SurroundingRectangle(firstExampleCode[3], buff=0.04, color=YELLOW)
         self.play(ReplacementTransform(f_surr2, f_surr3))
         self.wait(0.7)
 
@@ -327,7 +329,7 @@ class CodeAnalyzer(Scene):
         memory2.set_color(BLUE_B)
         self.wait(1)
 
-        f_surr5 = SurroundingRectangle(b2, buff=0.04, color=YELLOW)
+        f_surr5 = SurroundingRectangle(firstExampleCode[5], buff=0.04, color=YELLOW)
         self.play(ReplacementTransform(f_surr4, f_surr5))
         self.wait(0.7)
 
@@ -335,15 +337,15 @@ class CodeAnalyzer(Scene):
         self.wait(0.7)
 
         # inner block in main cont
-        mm_surr5 = SurroundingRectangle(b5, buff=0.04, color=GREEN)
+        mm_surr5 = SurroundingRectangle(firstExampleCode[13], buff=0.04, color=GREEN)
         self.play(ReplacementTransform(mm_surr4, mm_surr5))
         self.wait(0.7)
 
-        self.play(FadeOut(memory1))
+        self.play(FadeOut(innerBrace))
         self.wait(0.7)
 
         # main block cont
-        m_surr4 = SurroundingRectangle(l10, buff=0.04, color=RED)
+        m_surr4 = SurroundingRectangle(firstExampleCode[14], buff=0.04, color=RED)
         self.play(ReplacementTransform(mm_surr5, m_surr4))
         self.wait(0.7)
 
@@ -470,64 +472,64 @@ class Tips_Local(Scene):
         l1 = TextMobject("\\textrm{ main}", "\\textrm{()}")
         for i, color in zip(l1, [PURPLE_C, WHITE]):
             i.set_color(color)
-        code.add(l1)
+        code.add(l1) #0
 
         b1 = TextMobject("\\textrm{\\{}")
         b1.set_color(color, WHITE)
-        code.add(b1)
+        code.add(b1) #1
 
         l2 = TextMobject("    \\textrm{auto}", "\\textrm{ int}", "\\textrm{ i}", "\\textrm{ = 1;}")
         for i, color in zip(l2, [ORANGE, BLUE, RED_E, WHITE]):
             i.set_color(color)
-        code.add(l2)
+        code.add(l2) #2
 
         b2 = TextMobject("    \\textrm{\\{}")
         b2.set_color(color, WHITE)
-        code.add(b2)
+        code.add(b2) #3
 
         l3 = TextMobject("        \\textrm{auto}", "\\textrm{ int}", "\\textrm{ i}", "\\textrm{ = 2;}")
         for i, color in zip(l3, [ORANGE, BLUE, RED_E, WHITE]):
             i.set_color(color)
-        code.add(l3)
+        code.add(l3) #4
 
         b3 = TextMobject("        \\textrm{\\{}")
         b3.set_color(color, WHITE)
-        code.add(b3)
+        code.add(b3) #5
 
         l4 = TextMobject("            \\textrm{auto}", "\\textrm{ int}", "\\textrm{ i}", "\\textrm{ = 3;}")
         for i, color in zip(l4, [ORANGE, BLUE, RED_E, WHITE]):
             i.set_color(color)
-        code.add(l4)
+        code.add(l4) #6
 
         l5 = TextMobject("            \\textrm{printf}", "\\textrm{(}", "\\textrm{ \"\%d, \"}", "\\textrm{,}",
                          "\\textrm{ i}", "\\textrm{ );}")
         for i, color in zip(l5, [PURPLE_C, WHITE, GREEN, WHITE, RED_E, WHITE]):
             i.set_color(color)
-        code.add(l5)
+        code.add(l5) #7
 
         b4 = TextMobject("        \\textrm{\\}}")
         b4.set_color(color, WHITE)
-        code.add(b4)
+        code.add(b4) #8
 
         l6 = TextMobject("        \\textrm{printf}", "\\textrm{(}", "\\textrm{ \"\%d, \"}", "\\textrm{,}",
                          "\\textrm{ i}", "\\textrm{ );}")
         for i, color in zip(l6, [PURPLE_C, WHITE, GREEN, WHITE, RED_E, WHITE]):
             i.set_color(color)
-        code.add(l6)
+        code.add(l6) #9
 
         b5 = TextMobject("    \\textrm{\\}}")
         b5.set_color(color, WHITE)
-        code.add(b5)
+        code.add(b5) #10
 
         l7 = TextMobject("    \\textrm{printf}", "\\textrm{(}", "\\textrm{ \"\%d, \"}", "\\textrm{,}",
                          "\\textrm{ i}", "\\textrm{ );}")
         for i, color in zip(l7, [PURPLE_C, WHITE, GREEN, WHITE, RED_E, WHITE]):
             i.set_color(color)
-        code.add(l7)
+        code.add(l7) #11
 
         b6 = TextMobject("\\textrm{\\}}")
         b6.set_color(color, WHITE)
-        code.add(b6)
+        code.add(b6) #12
 
         for i, l in enumerate(code):
             l.to_edge(LEFT, buff=0.5)
